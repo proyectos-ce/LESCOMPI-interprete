@@ -9,22 +9,22 @@ class FakeSender:
 	"""
 
 	def __init__(self):
-		self.status = True
+		self.running = True
 		self.queue = Queue()
 		self.thread = threading.Thread(target=self.repeat, daemon=True)
 		self.thread.start()
 
 	def random_number(self):
-		return randrange(0, 100)
+		return randrange(0, 20)
 
 	def stop(self):
-		self.status = False
+		self.running = False
 		self.thread.join()
 
 	def repeat(self):
-		while self.status:
+		while self.running:
 			self.queue.put(self.random_number())
-			time.sleep(1/80)
+			time.sleep(1/2)
 
 	def get_queue(self):
 		return self.queue

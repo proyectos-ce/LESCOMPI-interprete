@@ -1,16 +1,12 @@
-import threading
-from queue import Queue
-
+from analyzer import Analyzer
 from fake_sender import FakeSender
-from syntax_analyzer import SyntaxAnalyzer
+from list_parser import ListParser
 
 
 def main():
-    global fs
+    global fs, analyzer
     fs = FakeSender()
-    analyzer = SyntaxAnalyzer()
-    analyzer.percent_analyzer([2,2,2,2,3,3,3],8)
-
+    analyzer = Analyzer(fs.get_queue(), 11)
 
 #print(fs.get_queue().qsize())
 
