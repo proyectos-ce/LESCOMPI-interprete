@@ -32,16 +32,16 @@ class Analyzer:
 
 			if len(data) > 1 and data[0][0] == data[1][0]:
 				if data[0][1] == self.lastCode:
-					if self.lastCode != None:
+					if self.lastCode is not None:
 						self.finalCodes.append(self.lastCode)
 					self.lastCode = data[1][1]
 				else:
-					if self.lastCode != None:
+					if self.lastCode is not None:
 						self.finalCodes.append(self.lastCode)
 					self.lastCode = data[0][1]
 
 			if data[0][1] != self.lastCode:
-				if self.lastCode != None:
+				if self.lastCode is not None:
 					self.finalCodes.append(self.lastCode)
 				self.lastCode = data[0][1]
 
