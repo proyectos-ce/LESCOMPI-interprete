@@ -1,12 +1,12 @@
 import toml
 import os
-
+from queue import Queue
 
 class Semantic:
 	def __init__(self, queue):
 		self.queue = queue
 		self.final_string = ""
-		self.final_list = []
+		self.list = []
 		try:
 			self.data = toml.load("lesco.toml")
 		except:
@@ -33,7 +33,7 @@ class Semantic:
 
 	def parse_queue(self):
 		while self.queue.qsize() > 0:
-			self.final_list.append(self.parse_id(self.queue.get()))
+			self.list.append(self.parse_id(self.queue.get()))
 
 		self.parse_list()
 
@@ -50,11 +50,25 @@ class Semantic:
 		for token in self.list:
 			if isinstance(token, list):
 				if i == 0 or (len(self.list[i - 1]) > 0 and isinstance(self.list[i - 1], str)):
-					# considerarSiguiente
-					return None
+					next = self.list[i + 1]
+
+					j = 1
+					while next is not None and isinstance(next, list):
+						j += 1
+						next = self.list[i + j]
+
+					if next is None:
+						self.final_string += " " + token[0] + " ó " + token[1]
+
+					if self._safe_cast(next, int) is not None:
+						self.final_string += token[1]
+					else:
+						self.final_string += token[0]
 				else:
-					# considerarAnterior
-					return None
+					if self._safe_cast(self.list[i - 1], int) is not None:  # Si el anterior es número
+						self.final_string += token[1]  # Commit del número
+					else:
+						self.final_string += token[0]  # Commit del string
 			else:
 				if len(token) > 1 \
 					and token is not "CH" \
@@ -66,7 +80,7 @@ class Semantic:
 
 			i += 1
 
-		self.final_list = []
+		self.list = []
 		tmp = self.final_string
 		self.final_string = []
 		return tmp
