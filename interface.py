@@ -31,6 +31,5 @@ class Interface:
         blackbutton.pack(side=BOTTOM)
 
         root.title("Hola mundo")
-        root.iconbitmap(r'icon.ico')
 
         root.mainloop()
