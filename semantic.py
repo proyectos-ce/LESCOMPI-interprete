@@ -37,7 +37,10 @@ class Semantic:
 
 		self.parse_list()
 
-		return self.final_string
+		tmp = self.final_string.strip()
+		self.final_string = ""
+
+		return tmp
 
 	def parse_id(self, id):
 		token = self.convert_id_to_token(id)
@@ -50,7 +53,10 @@ class Semantic:
 		for token in self.list:
 			if isinstance(token, list):
 				if i == 0 or (len(self.list[i - 1]) > 0 and isinstance(self.list[i - 1], str)):
-					next = self.list[i + 1]
+					if i + 1 is len(self.list):
+						next = None
+					else:
+						next = self.list[i + 1]
 
 					j = 1
 					while next is not None and isinstance(next, list):
@@ -58,12 +64,12 @@ class Semantic:
 						next = self.list[i + j]
 
 					if next is None:
-						self.final_string += " " + token[0] + " ó " + token[1]
-
-					if self._safe_cast(next, int) is not None:
-						self.final_string += token[1]
+						self.final_string += " " + token[0] + " o " + token[1]
 					else:
-						self.final_string += token[0]
+						if self._safe_cast(next, int) is not None:
+							self.final_string += token[1]
+						else:
+							self.final_string += token[0]
 				else:
 					if self._safe_cast(self.list[i - 1], int) is not None:  # Si el anterior es número
 						self.final_string += token[1]  # Commit del número
@@ -74,13 +80,10 @@ class Semantic:
 					and token is not "CH" \
 					and token is not "LL" \
 					and token is not "RR":
-						self.final_string += token + " "
+						self.final_string += " " + token + " "  # Parsear palabras
 				else:
 					self.final_string += token
 
 			i += 1
 
 		self.list = []
-		tmp = self.final_string
-		self.final_string = []
-		return tmp
