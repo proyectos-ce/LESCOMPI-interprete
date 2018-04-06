@@ -30,4 +30,7 @@ class Interface:
         blackbutton = Button(bottomframe, text="Black", fg="black")
         blackbutton.pack(side=BOTTOM)
 
+        root.title("Hola mundo")
+        root.iconbitmap(r'icon.ico')
+
         root.mainloop()
