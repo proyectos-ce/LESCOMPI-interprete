@@ -1,6 +1,7 @@
 from queue import Queue
 import threading
 from tkinter import *
+from queue import Queue
 
 
 class Interface:
