@@ -1,12 +1,12 @@
 import paho.mqtt.client as mqtt
-import simpleaudio as sa
-import tempfile
 import requests
 from requests.auth import HTTPBasicAuth
+import uuid
+from subprocess import call
 
 class Receiver:
 	def on_connect(self, client, userdata, flags, rc):
-		print("Connected with result code ", str(rc))
+		print("Connected to sound with result code ", str(rc))
 		client.subscribe("leapLescoSound")
 
 	def on_disconnect(self, client, userdata, rc):
@@ -14,18 +14,18 @@ class Receiver:
 
 	def on_message(self, client, userdata, msg):
 		data = msg.payload.decode("utf-8")
-		url = f"https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?accept=audio/wav&text={data}&voice=es-LA_SofiaVoice"
+		url = "https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?accept=audio/wav&text=" + data + "&voice=es-LA_SofiaVoice"
 		username = "e034115b-f434-4cac-a248-bdeccf00498f"
 		password = "DeMiAWipCouP"
 
 		r = requests.get(url, auth=HTTPBasicAuth(username, password))
 
-		with tempfile.NamedTemporaryFile("wb") as temp:
+		unique_filename = str(uuid.uuid4())
+
+		with open(unique_filename + ".wav", "wb") as temp:
 			temp.write(r.content)
-			wave_obj = sa.WaveObject.from_wave_file(temp.name)
-			play_obj = wave_obj.play()
-			while play_obj.is_playing():
-				continue
+			print("Reproduciendo " + temp.name)
+			call(["cvlc", "--play-and-exit", temp.name])
 
 	def __init__(self):
 		client = mqtt.Client()

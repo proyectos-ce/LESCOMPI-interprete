@@ -81,11 +81,26 @@ class Interface:
 
 		# BUTTON
 		self.button = Button(stetic_frame, text="Procesar", font=("Helvetica", 22), command=self.commit)
-		self.button.place(x=302,y=50)
+		self.button.place(x=230,y=40)
 
-		self.root.title("Interprete LESCOmpi")
+		# BUTTON
+		self.button = Button(stetic_frame, text="Limpiar", font=("Helvetica", 22), command=self.clean)
+		self.button.place(x=382,y=40)
+
+		self.root.title("Insterprete LESCOmpi")
 		self.periodicCall()
 		self.root.mainloop()
+
+	def clean(self):
+		del self.context_list[:]
+		self.semantic_interface.clean()
+		self.final_string = " "
+		del self.token_list[:]
+		del self.receiving_list[:]
+		self.final_update(self.context_list, self.final_string.upper())
+		with self.queue.mutex:
+			self.queue.queue.clear()
+
 
 	def check_connection(self):
 		if self.connection[0]:

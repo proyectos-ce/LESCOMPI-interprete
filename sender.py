@@ -3,7 +3,7 @@ import json
 
 class Sender:
 	def on_connect(self, client, userdata, flags, rc):
-		print("Connected with result code ", str(rc))
+		print("Connected to sound with result code ", str(rc))
 
 	def on_disconnect(self, client, userdata, rc):
 		print("Desconectado")
