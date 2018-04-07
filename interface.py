@@ -143,20 +143,21 @@ class Interface:
 		self.update_listbox(self.receiving_list, self.token_list)
 
 		if self.queue.qsize() > 4:
-			text = self.semantic_interface.parse_queue()
-			print(text)
-			url = f"https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?accept=audio/wav&text={text}&voice=es-LA_SofiaVoice"
+			self.final_string = self.semantic_interface.parse_queue()
+			print(self.context_list)
+			self.final_update(self.context_list, self.final_string)
+			#url = f"https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?accept=audio/wav&text={text}&voice=es-LA_SofiaVoice"
 			username = "e034115b-f434-4cac-a248-bdeccf00498f"
 			password = "DeMiAWipCouP"
 
-			r = requests.get(url, auth=HTTPBasicAuth(username, password))
+			#r = requests.get(url, auth=HTTPBasicAuth(username, password))
 
-			with tempfile.NamedTemporaryFile("wb") as temp:
-				temp.write(r.content)
-				wave_obj = sa.WaveObject.from_wave_file(temp.name)
-				play_obj = wave_obj.play()
-				while play_obj.is_playing():
-					continue
+			#with tempfile.NamedTemporaryFile("wb") as temp:
+			#	temp.write(r.content)
+			#	wave_obj = sa.WaveObject.from_wave_file(temp.name)
+			#	play_obj = wave_obj.play()
+			#	while play_obj.is_playing():
+			#		continue
 
 	def on_closing(self):
 		if messagebox.askokcancel("Quit", "Do you want to quit?"):

@@ -40,10 +40,7 @@ class Semantic:
 
 		self.parse_list()
 
-		tmp = self.final_string.strip()
-		self.final_string = ""
-
-		return tmp
+		return self.final_string
 
 	def parse_id(self, id):
 		token = self.convert_id_to_token(id)
@@ -52,11 +49,8 @@ class Semantic:
 			return token
 
 	def is_word_start(self, token):
-		if (len(token) > 1 \
-			and token is not "CH" \
-			and token is not "LL" \
-			and token is not "RR") \
-			or token is " ":
+		token = token.strip().upper()
+		if (len(token) > 1 and not (token == "CH" or token == "LL" or token == "RR")) or token == " ":
 				return True
 		else:
 			return False
@@ -68,6 +62,10 @@ class Semantic:
 	def commit(self, value):
 		self.final_string += value
 		self.context_list.append(value.strip())
+
+	def clean(self):
+		self.final_string = ""
+		self.context_list = []
 
 	def parse_list(self):
 		i = 0
@@ -109,6 +107,7 @@ class Semantic:
 						self._debug_print("C4 " + self.final_string)
 			else:
 				if self.is_word_start(token):
+						print("Agregamos a " + token + " con espacios")
 						self.commit(" " + token + " ")  # Parsear palabras
 				else:
 					self.commit(token)
