@@ -66,7 +66,7 @@ class Semantic:
 			print(text)
 
 	def commit(self, value):
-		self.final_string += text
+		self.final_string += value
 		self.context_list.append(value.strip())
 
 	def parse_list(self):
