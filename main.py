@@ -7,6 +7,8 @@ from semantic import Semantic
 from queue import Queue
 from receiver import Receiver
 import json
+from sender import Sender
+
 def main():
 	# global fs, analyzer
 	# fs = FakeSender()
@@ -17,11 +19,13 @@ def main():
 	token_list = []
 	context_list = []
 	final_string = ""
-	r = Receiver(q, receiving_list)
+	connected = [0]
+	r = Receiver(q, receiving_list, connected)
 	a = Analyzer(receiving_list, token_list)
 	s = Semantic(q, receiving_list, token_list, context_list, final_string)
+	sender = Sender()
 
-	interface = Interface(q, receiving_list, token_list, context_list, final_string, s)
+	interface = Interface(q, receiving_list, token_list, context_list, final_string, s, connected, sender)
 
 
 
