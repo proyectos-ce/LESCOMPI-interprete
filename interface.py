@@ -91,8 +91,16 @@ class Interface:
 		statustitle = Label(frame, text="Texto Final:", width=10, height=1, font=("Helvetica", 26), bg="#3b8686")
 		statustitle.place(x=listbox_xplace, y=listbox_yplace + 343)
 
+
+		self.position=0
+		self.pos = Label(frame, text=">>>", width=3, height=1, font=("Helvetica", 24), bg="#3b8686")
+		self.pos.place(x=listbox_xplace-48, y=listbox_yplace +390)
+
+		#
+		#420
+		#450
 		self.finaltext = Listbox(frame, width=63, height=3, font=("Helvetica", 26),yscrollcommand=scrollbar.set)
-		self.finaltext.place(x=listbox_xplace, y=listbox_yplace + 380)
+		self.finaltext.place(x=listbox_xplace, y=listbox_yplace + 390)
 		self.finaltext.insert(END,"*ESCUCHANDO*")
 		self.escuchando=True
 
@@ -111,10 +119,10 @@ class Interface:
 	def clean(self):
 		del self.context_list[:]
 		self.semantic_interface.clean()
-		self.final_string = " "
+		self.final_string = ""
 		del self.token_list[:]
 		del self.receiving_list[:]
-		self.final_update(self.context_list, self.final_string.upper())
+		self.listbox3_update(self.context_list)
 		with self.queue.mutex:
 			self.queue.queue.clear()
 
@@ -155,15 +163,30 @@ class Interface:
 			num += 1
 
 	def insert_finaltext(self, texto):
+		# if texto == "" or texto ==" ":
+
 		if self.escuchando:
 			self.escuchando = False
 			self.finaltext.delete(0,END)
-		self.finaltext.insert(END,texto)
-		self.finaltext.yview(END)
+			self.position += 1
+		elif self.position==0:
+			self.position+=1
+		elif self.position==1:
+			self.position+=1
+			self.pos.place(x=55 - 48, y=150 + 420)
+		elif self.position == 2:
+			self.position += 1
+			self.pos.place(x=55 - 48, y=150 + 450)
+		if texto != "":
+			self.finaltext.insert(END,texto)
+			self.finaltext.yview(END)
 
 	def final_update(self, lista, texto):
 		self.insert_listbox_3(lista)
 		self.insert_finaltext(texto)
+
+	def listbox3_update(self, lista):
+		self.insert_listbox_3(lista)
 
 	def erase_first(self):
 		self.listbox_1.delete(0, END)
@@ -193,6 +216,10 @@ class Interface:
 		self.root.after(200, self.periodicCall)
 
 	def proccessQueue(self):
+		if self.opq.qsize() > 0:
+			if self.opq.get() == 98:
+				self.commit()
+
 		self.update_listbox(self.receiving_list, self.token_list)
 		self.check_connection()
 
