@@ -5,8 +5,8 @@ from requests.auth import HTTPBasicAuth
 import simpleaudio as sa
 import tempfile
 
-class Interface:
 
+class Interface:
 	def __init__(self, queue, receiving_list, token_list, context_list, final_string, semantic_interface):
 		self.root = Tk()
 		self.root.geometry("1000x650")
@@ -72,7 +72,6 @@ class Interface:
 
 		#self.erase_all()
 
-		self.final_update(["a","b","4"],"hola soy joseph")
 
 		self.root.title("Interprete LESCOmpi")
 		self.periodicCall()
@@ -103,7 +102,7 @@ class Interface:
 		num = 1
 		for i in lista:
 			str1 = " Id_" + str(num) + ": {" + str(i) + "}"
-			self.listbox_1.insert(END, str1)
+			self.listbox_3.insert(END, str1)
 			num += 1
 	def insert_finaltext (self,texto):
 		tx=texto
