@@ -107,7 +107,6 @@ class Semantic:
 						self._debug_print("C4 " + self.final_string)
 			else:
 				if self.is_word_start(token):
-						print("Agregamos a " + token + " con espacios")
 						self.commit(" " + token + " ")  # Parsear palabras
 				else:
 					self.commit(token)

@@ -135,7 +135,6 @@ class Interface:
 			# This is the brutal stop of the system. You may want to do
 			# some cleanup before actually shutting it down.
 			import sys
-			print("Bye")
 			sys.exit(1)
 		self.root.after(200, self.periodicCall)
 
@@ -144,8 +143,7 @@ class Interface:
 
 		if self.queue.qsize() > 4:
 			self.final_string = self.semantic_interface.parse_queue()
-			print(self.context_list)
-			self.final_update(self.context_list, self.final_string)
+			self.final_update(self.context_list, self.final_string.upper())
 			#url = f"https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?accept=audio/wav&text={text}&voice=es-LA_SofiaVoice"
 			username = "e034115b-f434-4cac-a248-bdeccf00498f"
 			password = "DeMiAWipCouP"

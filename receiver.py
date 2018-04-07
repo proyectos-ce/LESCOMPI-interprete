@@ -8,7 +8,7 @@ class Receiver:
 
 	def on_message(self, client, userdata, msg):
 		data = msg.payload.decode("utf-8")
-		print(data)
+		print("Data: " + data)
 		self.queue.put(str(json.loads(data)["id"]))
 		self.receivingList.append(str(json.loads(data)["id"]))
 
