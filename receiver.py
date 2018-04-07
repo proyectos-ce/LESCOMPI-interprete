@@ -1,24 +1,17 @@
-from queue import Queue
-import threading
+import paho.mqtt.client as mqtt
+
 
 class Receiver:
-	"""
-	Does something
-	"""
+	def on_connect(self, client, userdata, flags, rc):
+		print("Connected with result code ", str(rc))
+		client.subscribe("leapLesco")
+
+	def on_message(self, client, userdata, msg):
+		print(msg.payload)
 
 	def __init__(self):
-		self.queue = Queue()
-	#   self.thread = threading.Thread(target=self.repeat, daemon=True)
-	#	self.thread.start()
-
-	def stop(self):
-		self.status = False
-		self.thread.join()
-
-	# def repeat(self):
-	# 	while self.status:
-	# 		self.queue.put(self.random_number())
-	# 		time.sleep(1/80)
-
-	def get_queue(self):
-		return self.queue
+		client = mqtt.Client()
+		client.on_connect = self.on_connect
+		client.on_message = self.on_message
+		client.connect("iot.eclipse.org", 1883, 60)
+		client.loop_forever()

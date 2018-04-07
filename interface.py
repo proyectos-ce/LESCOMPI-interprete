@@ -40,7 +40,6 @@ class Interface:
         self.listbox_3.config(state=DISABLED, bg="#c1c1c1")
 
         root.title("Interprete LESCOmpi")
-        root.iconbitmap(r'icon.ico')
         root.mainloop()
 
     def insert_listbox_1(self, lista):

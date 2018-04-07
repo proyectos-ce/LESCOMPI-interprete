@@ -10,10 +10,6 @@ from requests.auth import HTTPBasicAuth
 import simpleaudio as sa
 import tempfile
 
-if os.name == 'nt':
-    myappid = 'cr.tec.lescompi'
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
 
 def main():
     # global fs, analyzer

@@ -1,6 +1,6 @@
 import toml
 import os
-from queue import Queue
+
 
 class Semantic:
 	def __init__(self, queue):
