@@ -19,4 +19,15 @@ class Analyzer:
 	def repeat(self):
 		while self.running:
 			while len(self.receiving_list) is not len(self.token_list):
-				self.token_list.append((self.s2.convert_id_to_token(self.receiving_list[len(self.token_list)]), "TEST"))
+				token = self.s2.convert_id_to_token(self.receiving_list[len(self.token_list)])
+				if isinstance(token, list):
+					type = "LETRA|NUM"
+				elif self.s2._safe_cast(token, int):
+					type = "NUM"
+				elif token == " ":
+					type = "ESPACIO"
+				elif len(token) > 1 and not (token == "CH" or token == "LL" or token == "RR"):
+					type = "PALABRAS"
+				else:
+					type = "LETRA"
+				self.token_list.append((token, type))
