@@ -3,10 +3,13 @@ import os
 
 
 class Semantic:
-	def __init__(self, queue):
+	def __init__(self, queue, receiving_list, token_list, context_list, final_string):
 		self.queue = queue
-		self.final_string = ""
+		self.final_string = final_string
+		self.context_list = context_list
 		self.list = []
+		self.receiving_list = receiving_list
+		self.token_list = token_list
 		try:
 			self.data = toml.load("lesco.toml")
 		except:
@@ -62,6 +65,10 @@ class Semantic:
 		if __debug__:
 			print(text)
 
+	def commit(self, value):
+		self.final_string += text
+		self.context_list.append(value.strip())
+
 	def parse_list(self):
 		i = 0
 		for token in self.list:
@@ -81,30 +88,30 @@ class Semantic:
 							next = None
 
 					if next is None:
-						self.final_string += " " + token[0] + " o " + token[1]
+						self.commit(" " + token[0] + " o " + token[1])
 						self._debug_print("C0 " + self.final_string)
 					else:
 						if self._safe_cast(next, int) is not None:
-							self.final_string += token[1]
+							self.commit(token[1])
 							self._debug_print("C1 " + self.final_string)
 						elif self.is_word_start(next):
-							self.final_string += " " + token[0] + " o " + token[1]
+							self.commit(" " + token[0] + " o " + token[1])
 							self._debug_print("C20 " + self.final_string)
 						else:
-							self.final_string += token[0]
+							self.commit(token[0])
 							self._debug_print("C2 " + self.final_string)
 				else:
 					if self._safe_cast(self.list[i - 1], int) is not None:  # Si el anterior es número
-						self.final_string += token[1]  # Commit del número
+						self.commit(token[1])  # Commit del número
 						self._debug_print("C3 " + self.final_string)
 					else:
-						self.final_string += token[0]  # Commit del string
+						self.commit(token[0])  # Commit del string
 						self._debug_print("C4 " + self.final_string)
 			else:
 				if self.is_word_start(token):
-						self.final_string += " " + token + " "  # Parsear palabras
+						self.commit(" " + token + " ")  # Parsear palabras
 				else:
-					self.final_string += token
+					self.commit(token)
 
 			i += 1
 

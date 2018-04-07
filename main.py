@@ -15,11 +15,17 @@ def main():
 	# global fs, analyzer
 	# fs = FakeSender()
 	# analyzer = Analyzer(fs.get_queue(), 11)
-	interface = Interface()
 
 	q = Queue()
-	r = Receiver(q)
-	s = Semantic(q)
+	receiving_list = []
+	token_list = []
+	context_list = []
+	final_string = ""
+	r = Receiver(q, receiving_list)
+	a = Analyzer(receiving_list, token_list)
+	s = Semantic(q, receiving_list, token_list, context_list, final_string)
+
+	interface = Interface(receiving_list, token_list, context_list, final_string, s)
 
 	while True:
 		if q.qsize() > 4:
