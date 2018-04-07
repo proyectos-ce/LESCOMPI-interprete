@@ -3,7 +3,8 @@ from tkinter import messagebox
 
 
 class Interface:
-	def __init__(self, queue, receiving_list, token_list, context_list, final_string, semantic_interface, connected, sender, opq):
+	def __init__(self, queue, receiving_list, token_list, context_list, final_string, semantic_interface, connected,
+	             sender, opq):
 		self.root = Tk()
 		self.root.geometry("1000x650")
 		self.root.title('Test')
@@ -41,52 +42,67 @@ class Interface:
 		self.connection = connected
 
 		self.canvasonline = Canvas(stetic_frame, borderwidth=0, highlightthickness=0, bg="#0b486b")
-		self.canvasonline.place(x=30,y=42)
-		self.canvasonline.create_oval(30, 40, 50, 60,fill="gray", outline="#DDD", width=2)
-		self.statustext = Label(stetic_frame, text="OFFLINE", width=9, height=2, font=("Helvetica", 22),bg="#0b486b")
-		self.statustext.place(x=82,y=66)
-
+		self.canvasonline.place(x=30, y=42)
+		self.canvasonline.create_oval(30, 40, 50, 60, fill="gray", outline="#DDD", width=2)
+		self.statustext = Label(stetic_frame, text="OFFLINE", width=9, height=2, font=("Helvetica", 22), bg="#0b486b")
+		self.statustext.place(x=82, y=66)
 
 		statustitle = Label(stetic_frame, text="STATUS:", width=9, height=1, font=("Helvetica", 26), bg="#0b486b")
 		statustitle.place(x=30, y=40)
 
 		# LISTBOX_______ #1
 		scrollbar = Scrollbar(frame, orient=VERTICAL)
+
+
 		self.listbox_1 = Listbox(frame, width=28, height=16, font=(("Helvetica", 18)), yscrollcommand=scrollbar.set)
 		scrollbar.config(command=self.listbox_1.yview)
 		# scrollbar.pack(side=RIGHT, fill=Y)
 
+		statustitle = Label(frame, text="Entrantes:", width=10, height=1, font=("Helvetica", 26), bg="#3b8686")
+		statustitle.place(x=listbox_xplace-14, y=listbox_yplace - 36)
+
 		self.listbox_1.place(x=listbox_xplace, y=listbox_yplace)
 		self.listbox_1.insert(END, "Esperando...")
 
-		# for i in range(0, 18):
-		#     self.insert_listbox_1(" Id_2: {14}")
 
 		# LISTBOX_______ #2
+
+		statustitle = Label(frame, text="Tokens:", width=10, height=1, font=("Helvetica", 26), bg="#3b8686")
+		statustitle.place(x=listbox_xplace + 276, y=listbox_yplace - 36)
+
 		self.listbox_2 = Listbox(frame, width=28, height=16, font=(("Helvetica", 18)), yscrollcommand=scrollbar.set)
 		self.listbox_2.place(x=listbox_xplace + 300, y=listbox_yplace)
 
 		self.listbox_2.insert(END, "Esperando...")
 
 		# LISTBOX_______ #3
+
+		statustitle = Label(frame, text="Contexto:", width=10, height=1, font=("Helvetica", 26), bg="#3b8686")
+		statustitle.place(x=listbox_xplace + 590, y=listbox_yplace - 36)
+
 		self.listbox_3 = Listbox(frame, width=28, height=16, font=(("Helvetica", 18)), yscrollcommand=scrollbar.set,
-								 bg="#cff09e")
+		                         bg="#cff09e")
 		self.listbox_3.place(x=listbox_xplace + 600, y=listbox_yplace)
 		self.listbox_3.insert(END, " * SIN ANALIZAR * ")
 		self.listbox_3.config(state=DISABLED, bg="#c1c1c1")
 
 		# LABEL _____________
-		self.finaltext = Label(frame, text="Hello, world!", width=38, height=2, font=("Helvetica", 42))
-		self.finaltext.place(x=listbox_xplace, y=listbox_yplace + 370)
-		self.finaltext.config(text="*ESCUCHANDO*")
+
+		statustitle = Label(frame, text="Texto Final:", width=10, height=1, font=("Helvetica", 26), bg="#3b8686")
+		statustitle.place(x=listbox_xplace, y=listbox_yplace + 343)
+
+		self.finaltext = Listbox(frame, width=63, height=3, font=("Helvetica", 26),yscrollcommand=scrollbar.set)
+		self.finaltext.place(x=listbox_xplace, y=listbox_yplace + 380)
+		self.finaltext.insert(END,"*ESCUCHANDO*")
+		self.escuchando=True
 
 		# BUTTON
 		self.button = Button(stetic_frame, text="Procesar", font=("Helvetica", 22), command=self.commit)
-		self.button.place(x=230,y=40)
+		self.button.place(x=230, y=40)
 
 		# BUTTON
 		self.button = Button(stetic_frame, text="Limpiar", font=("Helvetica", 22), command=self.clean)
-		self.button.place(x=382,y=40)
+		self.button.place(x=382, y=40)
 
 		self.root.title("Insterprete LESCOmpi")
 		self.periodicCall()
@@ -102,7 +118,6 @@ class Interface:
 		with self.queue.mutex:
 			self.queue.queue.clear()
 
-
 	def check_connection(self):
 		if self.connection[0]:
 			self.statustext.config(text="ONLINE")
@@ -110,7 +125,6 @@ class Interface:
 		else:
 			self.statustext.config(text="OFFLINE")
 			self.canvasonline.create_oval(30, 40, 50, 60, fill="grey", outline="#DDD", width=2)
-
 
 	def update_listbox(self, list1, list2):
 		self.erase_first()
@@ -141,8 +155,11 @@ class Interface:
 			num += 1
 
 	def insert_finaltext(self, texto):
-		tx = texto
-		self.finaltext.config(text=tx)
+		if self.escuchando:
+			self.escuchando = False
+			self.finaltext.delete(0,END)
+		self.finaltext.insert(END,texto)
+		self.finaltext.yview(END)
 
 	def final_update(self, lista, texto):
 		self.insert_listbox_3(lista)
@@ -156,14 +173,12 @@ class Interface:
 		self.listbox_1.delete(0, END)
 		self.listbox_2.delete(0, END)
 		self.listbox_3.delete(0, END)
-		self.finaltext.config(text=" *En Proceso* ")
 		self.listbox_3.config(state=DISABLED, bg="#c1c1c1")
 
 	def commit(self):
 		self.final_string = self.semantic_interface.parse_queue()
 		self.final_update(self.context_list, self.final_string.upper())
 		self.sender.send(self.final_string)
-
 
 	def periodicCall(self):
 		"""
@@ -178,14 +193,9 @@ class Interface:
 		self.root.after(200, self.periodicCall)
 
 	def proccessQueue(self):
-		while self.opq.qsize() > 0:
-			if self.opq.get() == 98:
-				self.commit()
-
 		self.update_listbox(self.receiving_list, self.token_list)
 		self.check_connection()
 
-		
 	def on_closing(self):
 		if messagebox.askokcancel("Quit", "Do you want to quit?"):
 			self.running = False
