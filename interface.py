@@ -3,7 +3,7 @@ from tkinter import messagebox
 
 
 class Interface:
-	def __init__(self, queue, receiving_list, token_list, context_list, final_string, semantic_interface, connected, sender):
+	def __init__(self, queue, receiving_list, token_list, context_list, final_string, semantic_interface, connected, sender, opq):
 		self.root = Tk()
 		self.root.geometry("1000x650")
 		self.root.title('Test')
@@ -17,6 +17,7 @@ class Interface:
 		listbox_xplace = 55
 		listbox_yplace = 150
 		self.running = True
+		self.opq = opq
 
 		self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -177,6 +178,10 @@ class Interface:
 		self.root.after(200, self.periodicCall)
 
 	def proccessQueue(self):
+		while self.opq.qsize() > 0:
+			if self.opq.get() == 98:
+				self.commit()
+
 		self.update_listbox(self.receiving_list, self.token_list)
 		self.check_connection()
 

@@ -15,17 +15,18 @@ def main():
 	# analyzer = Analyzer(fs.get_queue(), 11)
 
 	q = Queue()
+	opq = Queue()
 	receiving_list = []
 	token_list = []
 	context_list = []
 	final_string = ""
 	connected = [0]
-	r = Receiver(q, receiving_list, connected)
+	r = Receiver(q, receiving_list, connected, opq)
 	a = Analyzer(receiving_list, token_list)
 	s = Semantic(q, receiving_list, token_list, context_list, final_string)
 	sender = Sender()
 
-	interface = Interface(q, receiving_list, token_list, context_list, final_string, s, connected, sender)
+	interface = Interface(q, receiving_list, token_list, context_list, final_string, s, connected, sender, opq)
 
 
 

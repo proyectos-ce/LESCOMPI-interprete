@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
 
+
 class Receiver:
 	def on_connect(self, client, userdata, flags, rc):
 		print("Connected with result code ", str(rc))
@@ -14,13 +15,17 @@ class Receiver:
 	def on_message(self, client, userdata, msg):
 		data = msg.payload.decode("utf-8")
 		print("Data: " + data)
-		self.queue.put(str(json.loads(data)["id"]))
-		self.receivingList.append(str(json.loads(data)["id"]))
+		if str(json.loads(data)["id"]) == "98":
+			self.opq.put(98)
+		else:
+			self.queue.put(str(json.loads(data)["id"]))
+			self.receivingList.append(str(json.loads(data)["id"]))
 
-	def __init__(self, queue, receivingList, connected):
+	def __init__(self, queue, receivingList, connected, opq):
 		self.queue = queue
 		self.receivingList = receivingList
 		self.connected = connected
+		self.opq = opq
 
 		client = mqtt.Client()
 		client.on_connect = self.on_connect
